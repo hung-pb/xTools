@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EzTax - Tính Thuế Thu Nhập Cá Nhân 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        /* ============================================
+           DESIGN TOKENS & RESET
+           ============================================ */
+        :root {
+            /* Colors */
+            --color-primary: #2563EB;
+            --color-primary-light: #3B82F6;
+            --color-primary-dark: #1E40AF;
+            --color-accent: #8B5CF6;
+            --color-accent-light: #A78BFA;
+            --color-success: #16A34A;
+            --color-success-light: #22C55E;
+
+            /* Backgrounds */
+            --color-bg-dark: #0F172A;
+            --color-bg-darker: #020617;
+            --color-bg-card: rgba(255, 255, 255, 0.05);
+            --color-bg-card-hover: rgba(255, 255, 255, 0.08);
+
+            /* Text */
+            --color-text-primary: #F8FAFC;
+            --color-text-secondary: #CBD5E1;
+            --color-text-muted: #94A3B8;
+
+            /* Borders */
+            --color-border: rgba(255, 255, 255, 0.1);
+            --color-border-focus: rgba(37, 99, 235, 0.5);
+
+            /* Spacing */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 28px;
+            --font-size-4xl: 32px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            background-attachment: fixed;
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .logo {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary-light), var(--color-accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+            font-weight: 400;
+        }
+
+        /* ============================================
+           MAIN LAYOUT - TWO COLUMNS
+           ============================================ */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* ============================================
+           CARD COMPONENT
+           ============================================ */
+        .card {
+            background: var(--color-bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Ensure input card tooltips appear above results card */
+        .main-layout>.card:first-child {
+            z-index: 2;
+        }
+
+        .main-layout>.card:last-child {
+            z-index: 1;
+        }
+
+        .card:hover {
+            background: var(--color-bg-card-hover);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-text-primary);
+        }
+
+        /* ============================================
+           FORM ELEMENTS
+           ============================================ */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: var(--font-size-base);
+            font-family: var(--font-family);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--color-border-focus);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .helper-text {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-muted);
+            margin-top: var(--spacing-sm);
+            line-height: 1.4;
+        }
+
+        /* Number input stepper */
+        .number-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .stepper-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-lg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stepper-btn:hover {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            transform: scale(1.05);
+        }
+
+        .stepper-btn:active {
+            transform: scale(0.95);
+        }
+
+        .number-display {
+            flex: 1;
+            text-align: center;
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        /* ============================================
+           BUTTON
+           ============================================ */
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow), var(--shadow-xl);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           RESULT CARD
+           ============================================ */
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .result-value {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--color-border);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .highlight-block {
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            text-align: center;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .highlight-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .highlight-amount {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--color-success-light);
+            line-height: 1.2;
+        }
+
+        .effective-rate {
+            text-align: center;
+            margin-top: var(--spacing-md);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+        }
+
+        /* ============================================
+           TABLE
+           ============================================ */
+        .table-container {
+            margin-bottom: var(--spacing-xl);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--color-bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(139, 92, 246, 0.2));
+        }
+
+        th {
+            padding: var(--spacing-md);
+            text-align: left;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: var(--spacing-md);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            border-top: 1px solid var(--color-border);
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .table-number {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .table-rate {
+            color: var(--color-accent-light);
+            font-weight: 600;
+        }
+
+        tfoot {
+            background: rgba(22, 163, 74, 0.1);
+            border-top: 2px solid var(--color-success);
+        }
+
+        tfoot td {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            font-size: var(--font-size-base);
+        }
+
+        /* ============================================
+           CHART
+           ============================================ */
+        .chart-container {
+            background: var(--color-bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .chart-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-text-primary);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        /* ============================================
+           TOOLTIP
+           ============================================ */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            color: var(--color-primary-light);
+            margin-left: var(--spacing-xs);
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-bg-darker);
+            color: var(--color-text-primary);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            white-space: nowrap;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+            z-index: 30000;
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: var(--font-size-3xl);
+            }
+
+            .subtitle {
+                font-size: var(--font-size-sm);
+            }
+
+            .highlight-amount {
+                font-size: var(--font-size-3xl);
+            }
+
+            .chart-wrapper {
+                height: 250px;
+            }
+
+            table {
+                font-size: var(--font-size-xs);
+            }
+
+            th,
+            td {
+                padding: var(--spacing-sm);
+            }
+        }
+
+        /* ============================================
+           CHECKBOX STYLES
+           ============================================ */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            cursor: pointer;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--color-primary);
+        }
+
+        .checkbox-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+
+        .checkbox-wrapper:hover .checkbox-label {
+            color: var(--color-text-primary);
+        }
+
+        .conditional-input {
+            margin-left: var(--spacing-lg);
+            margin-top: var(--spacing-sm);
+            padding-left: var(--spacing-lg);
+            border-left: 2px solid var(--color-primary);
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-lg {
+            margin-top: var(--spacing-lg);
+        }
+
+        .mt-md {
+            margin-top: var(--spacing-md);
+        }
+
+        .mb-sm {
+            margin-bottom: var(--spacing-sm);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">EzTax</h1>
+            <p class="subtitle">Personal Income Tax Calculator</p>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Input Card -->
+            <div class="card">
+                <h2 class="card-title">Thông tin đầu vào</h2>
+
+                <div class="form-group">
+                    <label class="form-label" for="income">
+                        Thu nhập hàng tháng (VNĐ)
+                        <span class="tooltip" data-tooltip="Tổng thu nhập trước thuế">ⓘ</span>
+                    </label>
+                    <input type="text" id="income" class="form-input" placeholder="40,000,000" value="40000000">
+                </div>
+
+                <!-- Custom Insurance Base -->
+                <div class="form-group">
+                    <div class="checkbox-wrapper" onclick="document.getElementById('customInsuranceCheckbox').click()">
+                        <input type="checkbox" id="customInsuranceCheckbox" class="checkbox-input"
+                            onclick="event.stopPropagation()">
+                        <label class="checkbox-label" for="customInsuranceCheckbox">
+                            Tùy chỉnh lương đóng bảo hiểm
+                            <span class="tooltip"
+                                data-tooltip="Mặc định lương đóng BH = Thu nhập. Chọn để tùy chỉnh.">ⓘ</span>
+                        </label>
+                    </div>
+
+                    <div id="insuranceBaseInputWrapper" class="conditional-input hidden">
+                        <label class="form-label" for="insuranceBase">
+                            Lương đóng bảo hiểm (VNĐ)
+                        </label>
+                        <input type="text" id="insuranceBase" class="form-input" placeholder="40,000,000"
+                            value="40000000">
+                        <div class="helper-text">
+                            Lương đóng BH không được vượt quá thu nhập Gross
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="dependents">
+                        Số người phụ thuộc
+                        <span class="tooltip" data-tooltip="Người phụ thuộc theo quy định pháp luật">ⓘ</span>
+                    </label>
+                    <div class="number-input-wrapper">
+                        <button class="stepper-btn" id="decrementBtn">−</button>
+                        <div class="number-display" id="dependentsDisplay">1</div>
+                        <button class="stepper-btn" id="incrementBtn">+</button>
+                    </div>
+                </div>
+
+                <!-- Union Checkbox -->
+                <div class="form-group">
+                    <div class="checkbox-wrapper" onclick="document.getElementById('unionCheckbox').click()">
+                        <input type="checkbox" id="unionCheckbox" class="checkbox-input"
+                            onclick="event.stopPropagation()">
+                        <label class="checkbox-label" for="unionCheckbox">
+                            Tham gia công đoàn (0.5%)
+                            <span class="tooltip"
+                                data-tooltip="Phí công đoàn = 0.5% lương đóng BHXH, tối đa 234.000đ/tháng">ⓘ</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="helper-text">
+                    <strong>Thông tin tham khảo:</strong><br>
+                    • Bảo hiểm: 10.5% (BHXH 8% + BHYT 1.5% + BHTN 1%)<br>
+                    • Công đoàn phí: 0.5% lương đóng BHXH (tối đa 234.000đ)<br>
+                    • Giảm trừ bản thân: 15.500.000 VNĐ/tháng<br>
+                    • Giảm trừ người phụ thuộc: 6.200.000 VNĐ/tháng
+                </div>
+
+                <button class="btn mt-lg" id="calculateBtn">Tính thuế</button>
+            </div>
+
+            <!-- Result Card -->
+            <div class="card">
+                <h2 class="card-title">Kết quả</h2>
+
+                <div class="result-row">
+                    <span class="result-label">Tổng thu nhập (Gross)</span>
+                    <span class="result-value" id="totalIncome">0 VNĐ</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="result-row">
+                    <span class="result-label">Bảo hiểm xã hội (10.5%)</span>
+                    <span class="result-value" id="totalInsurance">0 VNĐ</span>
+                </div>
+
+                <div class="result-row" style="padding-left: 20px; font-size: 12px;">
+                    <span class="result-label">• BHXH (8%)</span>
+                    <span class="result-value" id="bhxh">0 VNĐ</span>
+                </div>
+
+                <div class="result-row" style="padding-left: 20px; font-size: 12px;">
+                    <span class="result-label">• BHYT (1.5%)</span>
+                    <span class="result-value" id="bhyt">0 VNĐ</span>
+                </div>
+
+                <div class="result-row" style="padding-left: 20px; font-size: 12px;">
+                    <span class="result-label">• BHTN (1%)</span>
+                    <span class="result-value" id="bhtn">0 VNĐ</span>
+                </div>
+
+                <div class="result-row" id="unionRow" style="display: none;">
+                    <span class="result-label">Phí công đoàn (0.5%)</span>
+                    <span class="result-value" id="unionFee">0 VNĐ</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="result-row">
+                    <span class="result-label">Thu nhập sau khấu trừ</span>
+                    <span class="result-value" id="incomeAfterDeductions">0 VNĐ</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-label">Giảm trừ gia cảnh</span>
+                    <span class="result-value" id="familyDeduction">0 VNĐ</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-label">Thu nhập tính thuế</span>
+                    <span class="result-value" id="taxableIncome">0 VNĐ</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="highlight-block">
+                    <div class="highlight-label">👉 Thuế TNCN phải nộp</div>
+                    <div class="highlight-amount" id="totalTax">0 VNĐ</div>
+                </div>
+
+                <div class="effective-rate">
+                    Thuế suất hiệu dụng: <strong id="effectiveRate">0%</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-container">
+            <h2 class="chart-title">Thuế TNCN theo từng bậc</h2>
+            <div class="chart-wrapper">
+                <canvas id="taxChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Tax Breakdown Table -->
+        <div class="table-container">
+            <h2 class="card-title text-center">Chi tiết thuế theo từng bậc</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bậc</th>
+                            <th>Thu nhập áp dụng (VNĐ)</th>
+                            <th>Thuế suất</th>
+                            <th>Thu nhập chịu thuế</th>
+                            <th>Thuế phải nộp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taxTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align: right;">Tổng cộng</td>
+                            <td class="table-number" id="tableTotalTax">0 VNĐ</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // TAX CALCULATION CONSTANTS
+        // ============================================
+        const TAX_CONFIG = {
+            selfDeduction: 15500000,
+            dependentDeduction: 6200000,
+            insuranceRate: 0.105,  // Total: BHXH 8% + BHYT 1.5% + BHTN 1%
+            unionRate: 0.005,      // Union fee: 0.5% of insurance base
+            unionMaxCap: 234000,   // Max union fee: 234,000 VND/month (10% of base salary 2.34M)
+            insuranceBreakdown: {
+                bhxh: 0.08,        // Social insurance
+                bhyt: 0.015,       // Health insurance
+                bhtn: 0.01         // Unemployment insurance
+            },
+            brackets: [
+                { max: 10000000, rate: 0.05, label: '≤ 10 triệu' },
+                { max: 30000000, rate: 0.10, label: '10 - 30 triệu' },
+                { max: 60000000, rate: 0.20, label: '30 - 60 triệu' },
+                { max: 100000000, rate: 0.30, label: '60 - 100 triệu' },
+                { max: Infinity, rate: 0.35, label: '> 100 triệu' }
+            ]
+        };
+
+        // ============================================
+        // STATE
+        // ============================================
+        let state = {
+            income: 40000000,
+            dependents: 1,
+            customInsuranceBase: false,
+            insuranceBase: 40000000,
+            hasUnion: false
+        };
+
+        let taxChart = null;
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const elements = {
+            income: document.getElementById('income'),
+            dependentsDisplay: document.getElementById('dependentsDisplay'),
+            incrementBtn: document.getElementById('incrementBtn'),
+            decrementBtn: document.getElementById('decrementBtn'),
+            calculateBtn: document.getElementById('calculateBtn'),
+            customInsuranceCheckbox: document.getElementById('customInsuranceCheckbox'),
+            insuranceBaseInputWrapper: document.getElementById('insuranceBaseInputWrapper'),
+            insuranceBase: document.getElementById('insuranceBase'),
+            unionCheckbox: document.getElementById('unionCheckbox'),
+            unionRow: document.getElementById('unionRow'),
+
+            totalIncome: document.getElementById('totalIncome'),
+            totalInsurance: document.getElementById('totalInsurance'),
+            bhxh: document.getElementById('bhxh'),
+            bhyt: document.getElementById('bhyt'),
+            bhtn: document.getElementById('bhtn'),
+            unionFee: document.getElementById('unionFee'),
+            incomeAfterDeductions: document.getElementById('incomeAfterDeductions'),
+            familyDeduction: document.getElementById('familyDeduction'),
+            taxableIncome: document.getElementById('taxableIncome'),
+            totalTax: document.getElementById('totalTax'),
+            effectiveRate: document.getElementById('effectiveRate'),
+            taxTableBody: document.getElementById('taxTableBody'),
+            tableTotalTax: document.getElementById('tableTotalTax')
+        };
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN').format(Math.round(amount)) + ' VNĐ';
+        }
+
+        function parseCurrency(str) {
+            return parseInt(str.replace(/[^\d]/g, '')) || 0;
+        }
+
+        function formatInputCurrency(input) {
+            const value = parseCurrency(input.value);
+            const formatted = new Intl.NumberFormat('vi-VN').format(value);
+            input.value = formatted;
+            return value;
+        }
+
+        // ============================================
+        // TAX CALCULATION LOGIC (NEW FORMULA)
+        // ============================================
+        function calculateTax(income, dependents, insuranceBase, hasUnion) {
+            // Step 1: Validate and calculate insurance base
+            const validInsuranceBase = Math.min(insuranceBase, income);
+
+            // Step 2: Calculate insurance (10.5% total)
+            const bhxh = validInsuranceBase * TAX_CONFIG.insuranceBreakdown.bhxh;
+            const bhyt = validInsuranceBase * TAX_CONFIG.insuranceBreakdown.bhyt;
+            const bhtn = validInsuranceBase * TAX_CONFIG.insuranceBreakdown.bhtn;
+            const totalInsurance = validInsuranceBase * TAX_CONFIG.insuranceRate;
+
+            // Step 3: Calculate union fee (0.5% of insurance base, max 234k VND)
+            const unionFee = hasUnion ? Math.min(validInsuranceBase * TAX_CONFIG.unionRate, TAX_CONFIG.unionMaxCap) : 0;
+
+            // Step 4: Income after deductions
+            const incomeAfterDeductions = income - totalInsurance - unionFee;
+
+            // Step 5: Family deduction
+            const familyDeduction = TAX_CONFIG.selfDeduction + (dependents * TAX_CONFIG.dependentDeduction);
+
+            // Step 6: Taxable income
+            const taxableIncome = Math.max(0, incomeAfterDeductions - familyDeduction);
+
+            // Step 7: Calculate tax for each bracket
+            const bracketResults = [];
+            let remainingIncome = taxableIncome;
+            let totalTax = 0;
+            let previousMax = 0;
+
+            for (let i = 0; i < TAX_CONFIG.brackets.length; i++) {
+                const bracket = TAX_CONFIG.brackets[i];
+                const bracketMax = bracket.max - previousMax;
+                const taxableInBracket = Math.min(remainingIncome, bracketMax);
+                const taxInBracket = taxableInBracket * bracket.rate;
+
+                bracketResults.push({
+                    bracket: i + 1,
+                    label: bracket.label,
+                    rate: bracket.rate,
+                    taxableAmount: taxableInBracket,
+                    taxAmount: taxInBracket
+                });
+
+                totalTax += taxInBracket;
+                remainingIncome -= taxableInBracket;
+                previousMax = bracket.max;
+
+                if (remainingIncome <= 0) break;
+            }
+
+            // Fill remaining brackets with zeros
+            for (let i = bracketResults.length; i < TAX_CONFIG.brackets.length; i++) {
+                bracketResults.push({
+                    bracket: i + 1,
+                    label: TAX_CONFIG.brackets[i].label,
+                    rate: TAX_CONFIG.brackets[i].rate,
+                    taxableAmount: 0,
+                    taxAmount: 0
+                });
+            }
+
+            const effectiveRate = income > 0 ? (totalTax / income) * 100 : 0;
+
+            return {
+                income,
+                insuranceBreakdown: {
+                    bhxh,
+                    bhyt,
+                    bhtn,
+                    total: totalInsurance
+                },
+                unionFee,
+                incomeAfterDeductions,
+                familyDeduction,
+                taxableIncome,
+                totalTax,
+                effectiveRate,
+                bracketResults
+            };
+        }
+
+        // ============================================
+        // UI UPDATE FUNCTIONS
+        // ============================================
+        function updateResults(results) {
+            // Update summary
+            elements.totalIncome.textContent = formatCurrency(results.income);
+            elements.totalInsurance.textContent = formatCurrency(results.insuranceBreakdown.total);
+            elements.bhxh.textContent = formatCurrency(results.insuranceBreakdown.bhxh);
+            elements.bhyt.textContent = formatCurrency(results.insuranceBreakdown.bhyt);
+            elements.bhtn.textContent = formatCurrency(results.insuranceBreakdown.bhtn);
+            elements.unionFee.textContent = formatCurrency(results.unionFee);
+            elements.unionRow.style.display = results.unionFee > 0 ? 'flex' : 'none';
+            elements.incomeAfterDeductions.textContent = formatCurrency(results.incomeAfterDeductions);
+            elements.familyDeduction.textContent = formatCurrency(results.familyDeduction);
+            elements.taxableIncome.textContent = formatCurrency(results.taxableIncome);
+            elements.totalTax.textContent = formatCurrency(results.totalTax);
+            elements.effectiveRate.textContent = results.effectiveRate.toFixed(2) + '%';
+            elements.tableTotalTax.textContent = formatCurrency(results.totalTax);
+
+            // Update table
+            elements.taxTableBody.innerHTML = results.bracketResults.map(bracket => `
+                <tr>
+                    <td class="table-number">${bracket.bracket}</td>
+                    <td>${bracket.label}</td>
+                    <td class="table-rate">${(bracket.rate * 100).toFixed(0)}%</td>
+                    <td class="table-number">${formatCurrency(bracket.taxableAmount)}</td>
+                    <td class="table-number">${formatCurrency(bracket.taxAmount)}</td>
+                </tr>
+            `).join('');
+
+            // Update chart
+            updateChart(results.bracketResults);
+        }
+
+        function updateChart(bracketResults) {
+            const ctx = document.getElementById('taxChart').getContext('2d');
+
+            // Filter out brackets with no tax
+            const activeBrackets = bracketResults.filter(b => b.taxAmount > 0);
+
+            const data = {
+                labels: activeBrackets.map(b => `Bậc ${b.bracket}`),
+                datasets: [{
+                    label: 'Thuế phải nộp (VNĐ)',
+                    data: activeBrackets.map(b => b.taxAmount),
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(251, 146, 60, 0.8)',
+                        'rgba(34, 197, 94, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(236, 72, 153, 1)',
+                        'rgba(251, 146, 60, 1)',
+                        'rgba(34, 197, 94, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#F8FAFC',
+                            bodyColor: '#CBD5E1',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: true,
+                            callbacks: {
+                                label: function (context) {
+                                    return 'Thuế: ' + formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94A3B8',
+                                callback: function (value) {
+                                    return (value / 1000000).toFixed(1) + 'M';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94A3B8'
+                            }
+                        }
+                    }
+                }
+            };
+
+            if (taxChart) {
+                taxChart.destroy();
+            }
+
+            taxChart = new Chart(ctx, config);
+        }
+
+        // ============================================
+        // EVENT HANDLERS
+        // ============================================
+        function handleCalculate() {
+            const income = parseCurrency(elements.income.value);
+            const dependents = state.dependents;
+            const insuranceBase = state.customInsuranceBase ? parseCurrency(elements.insuranceBase.value) : income;
+            const hasUnion = state.hasUnion;
+
+            state.income = income;
+            state.insuranceBase = insuranceBase;
+
+            const results = calculateTax(income, dependents, insuranceBase, hasUnion);
+            updateResults(results);
+        }
+
+        function handleCustomInsuranceToggle() {
+            state.customInsuranceBase = elements.customInsuranceCheckbox.checked;
+
+            if (state.customInsuranceBase) {
+                elements.insuranceBaseInputWrapper.classList.remove('hidden');
+                // Set insurance base to current income
+                elements.insuranceBase.value = elements.income.value;
+                formatInputCurrency(elements.insuranceBase);
+            } else {
+                elements.insuranceBaseInputWrapper.classList.add('hidden');
+            }
+        }
+
+        function handleUnionToggle() {
+            state.hasUnion = elements.unionCheckbox.checked;
+        }
+
+        function handleIncrement() {
+            state.dependents++;
+            elements.dependentsDisplay.textContent = state.dependents;
+        }
+
+        function handleDecrement() {
+            if (state.dependents > 0) {
+                state.dependents--;
+                elements.dependentsDisplay.textContent = state.dependents;
+            }
+        }
+
+        function handleIncomeInput(e) {
+            formatInputCurrency(e.target);
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        elements.calculateBtn.addEventListener('click', handleCalculate);
+        elements.incrementBtn.addEventListener('click', handleIncrement);
+        elements.decrementBtn.addEventListener('click', handleDecrement);
+        elements.income.addEventListener('blur', handleIncomeInput);
+        elements.customInsuranceCheckbox.addEventListener('change', handleCustomInsuranceToggle);
+        elements.insuranceBase.addEventListener('blur', handleIncomeInput);
+        elements.unionCheckbox.addEventListener('change', handleUnionToggle);
+
+        // Allow Enter key to calculate
+        elements.income.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleCalculate();
+            }
+        });
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            // Format initial income value
+            formatInputCurrency(elements.income);
+
+            // Calculate initial results
+            handleCalculate();
+        }
+
+        // Run on page load
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolbox - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2563EB;
+            --color-bg-dark: #0F172A;
+            --color-bg-darker: #020617;
+            --color-sidemenu-bg: #1E293B;
+            --color-text-primary: #F8FAFC;
+            --color-text-secondary: #94A3B8;
+            --color-hover: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-darker);
+            color: var(--color-text-primary);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--color-sidemenu-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .brand {
+            padding: 0 24px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tree Menu */
+        .tree-menu {
+            list-style: none;
+            padding: 0 12px;
+        }
+
+        .tree-item {
+            margin-bottom: 4px;
+        }
+
+        .tree-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .tree-label:hover {
+            background-color: var(--color-hover);
+            color: var(--color-text-primary);
+        }
+
+        .tree-label.active {
+            color: var(--color-primary);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .tree-icon {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .tree-toggle {
+            margin-left: auto;
+            transform: rotate(0deg);
+            transition: transform 0.2s;
+            font-size: 10px;
+        }
+
+        .tree-item.open>.tree-label .tree-toggle {
+            transform: rotate(90deg);
+        }
+
+        .tree-children {
+            list-style: none;
+            padding-left: 24px;
+            display: none;
+            /* Hidden by default */
+            margin-top: 4px;
+        }
+
+        .tree-item.open>.tree-children {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+        }
+
+        .welcome-container {
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .welcome-title {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60A5FA, #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        iframe.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <span>🛠️ Toolbox</span>
+        </div>
+
+        <ul class="tree-menu">
+            <!-- Parent: Tax -->
+            <li class="tree-item open">
+                <div class="tree-label" onclick="toggleNode(this)">
+                    <span class="tree-icon">📁</span>
+                    <span>Tax</span>
+                    <span class="tree-toggle">▶</span>
+                </div>
+                <ul class="tree-children">
+                    <li class="tree-item">
+                        <a href="eztax.html" class="tree-label" target="content-frame">
+                            <span class="tree-icon">📄</span>
+                            <span>EzTax Calculator</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Other tools placeholder -->
+            <li class="tree-item">
+                <div class="tree-label" onclick="toggleNode(this)">
+                    <span class="tree-icon">📁</span>
+                    <span>Utilities</span>
+                    <span class="tree-toggle">▶</span>
+                </div>
+                <ul class="tree-children">
+                    <li class="tree-item">
+                        <span class="tree-label" style="cursor: not-allowed; opacity: 0.5;">
+                            <span class="tree-icon">🔨</span>
+                            <span>Coming Soon</span>
+                        </span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <!-- Welcome Slogan (Default functionality) -->
+        <div id="welcome-slogan" class="welcome-container">
+            <h1 class="welcome-title">Welcome to Toolbox</h1>
+            <p class="welcome-subtitle">Select a tool from the sidebar to get started.</p>
+        </div>
+
+        <!-- Iframe to load tools -->
+        <iframe name="content-frame" id="content-frame"></iframe>
+    </main>
+
+    <script>
+        function toggleNode(element) {
+            const parent = element.parentElement;
+            parent.classList.toggle('open');
+        }
+
+        // Simple router logic for iframe vs welcome screen
+        const iframe = document.getElementById('content-frame');
+        const welcome = document.getElementById('welcome-slogan');
+        const links = document.querySelectorAll('a[target="content-frame"]');
+
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                welcome.style.display = 'none';
+                iframe.classList.add('active');
+
+                // Active state styling
+                document.querySelectorAll('.tree-label').forEach(el => el.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
