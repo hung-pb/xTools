@@ -42,3 +42,31 @@ links.forEach(link => {
         }
     });
 });
+
+// Home button logic
+const homeBtn = document.getElementById('go-home');
+if (homeBtn) {
+    homeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        welcome.style.display = 'block';
+        iframe.classList.remove('active');
+        iframe.src = 'about:blank';
+        document.querySelectorAll('.tree-label').forEach(el => el.classList.remove('active'));
+    });
+}
+
+// Info Widget Toggle
+const infoToggle = document.getElementById('infoToggle');
+const infoWidget = document.getElementById('infoWidget');
+if (infoToggle && infoWidget) {
+    infoToggle.addEventListener('click', () => {
+        infoWidget.classList.toggle('active');
+    });
+
+    // Close widget when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!infoWidget.contains(e.target)) {
+            infoWidget.classList.remove('active');
+        }
+    });
+}

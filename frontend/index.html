@@ -23,7 +23,8 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar">
         <div class="brand">
-            <span>🛠️ Toolbox</span>
+            <a href="#" id="go-home" class="home-btn" title="Home">🏠</a>
+            <span>🛠️ xToolbox</span>
         </div>
 
         <ul class="tree-menu">
@@ -45,7 +46,7 @@
             </li>
 
             <!-- Other tools placeholder -->
-            <li class="tree-item">
+            <li class="tree-item open">
                 <div class="tree-label" onclick="toggleNode(this)">
                     <span class="tree-icon">📁</span>
                     <span>Utilities</span>
@@ -53,10 +54,10 @@
                 </div>
                 <ul class="tree-children">
                     <li class="tree-item">
-                        <span class="tree-label" style="cursor: not-allowed; opacity: 0.5;">
-                            <span class="tree-icon">🔨</span>
-                            <span>Coming Soon</span>
-                        </span>
+                        <a href="random.html" class="tree-label" target="content-frame">
+                            <span class="tree-icon">🎲</span>
+                            <span>Random Tool</span>
+                        </a>
                     </li>
                 </ul>
             </li>
@@ -66,13 +67,23 @@
     <main class="main-content">
         <!-- Welcome Slogan (Default functionality) -->
         <div id="welcome-slogan" class="welcome-container">
-            <h1 class="welcome-title">Welcome to Toolbox</h1>
+            <h1 class="welcome-title">Welcome to xToolbox</h1>
             <p class="welcome-subtitle">Select a tool from the sidebar to get started.</p>
         </div>
 
         <!-- Iframe to load tools -->
         <iframe name="content-frame" id="content-frame"></iframe>
     </main>
+
+    <!-- Personal Info Widget -->
+    <div class="info-widget" id="infoWidget">
+        <button class="info-toggle" id="infoToggle" aria-label="Personal Info">
+            ✨
+        </button>
+        <div class="info-content">
+            <p>From <strong>Heinz</strong> with ❤️</p>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>

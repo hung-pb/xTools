@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Tool All-in-One</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/random.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 class="gradient-text">Random Tool All-in-One</h1>
+            <p class="subtitle">Premium randomness at your fingertips</p>
+        </header>
+
+        <div class="tool-grid">
+            <!-- Random Number Tool -->
+            <div class="tool-card" id="card-number">
+                <div class="card-header">
+                    <span class="card-icon">🔢</span>
+                    <h2>Random Number</h2>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <div class="field">
+                            <label>Min</label>
+                            <input type="number" id="num-min" value="1">
+                        </div>
+                        <div class="field">
+                            <label>Max</label>
+                            <input type="number" id="num-max" value="100">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Count</label>
+                        <input type="number" id="num-count" value="1">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="num-unique" checked>
+                        <label for="num-unique">Unique results</label>
+                    </div>
+                    <div class="result-display" id="num-result">?</div>
+                    <button class="btn-primary" onclick="generateNumbers()">GENERATE</button>
+                </div>
+            </div>
+
+            <!-- Shuffle List Tool -->
+            <div class="tool-card" id="card-shuffle">
+                <div class="card-header">
+                    <span class="card-icon">🔀</span>
+                    <h2>Shuffle List</h2>
+                </div>
+                <div class="card-body">
+                    <textarea id="shuffle-input" placeholder="Enter items (one per line)..."></textarea>
+                    <div class="result-area" id="shuffle-result"></div>
+                    <div class="button-row">
+                        <button class="btn-primary" onclick="shuffleList()">SHUFFLE</button>
+                        <button class="btn-secondary" onclick="copyShuffleResult()">COPY</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spin Wheel Tool -->
+            <div class="tool-card" id="card-wheel">
+                <div class="card-header">
+                    <span class="card-icon">🎡</span>
+                    <h2>Spin Wheel</h2>
+                </div>
+                <div class="card-body">
+                    <div class="wheel-container">
+                        <canvas id="wheel-canvas" width="300" height="300"></canvas>
+                        <div class="wheel-pointer"></div>
+                    </div>
+                    <textarea id="wheel-input" placeholder="Item 1&#10;Item 2&#10;Item 3" oninput="updateWheel()">Item 1
+Item 2
+Item 3</textarea>
+                    <button class="btn-primary" id="spin-button" onclick="spinWheel()">SPIN</button>
+                    <div class="wheel-result" id="wheel-result-text"></div>
+                </div>
+            </div>
+
+            <!-- Yes/No Tool -->
+            <div class="tool-card" id="card-yesno">
+                <div class="card-header">
+                    <span class="card-icon">⚖️</span>
+                    <h2>Yes / No / Maybe</h2>
+                </div>
+                <div class="card-body center-content">
+                    <div class="decision-card" id="decision-card">
+                        <div class="card-face front">?</div>
+                        <div class="card-face back" id="decision-result">YES</div>
+                    </div>
+                    <button class="btn-primary" onclick="decideYesNo()">DECIDE</button>
+                </div>
+            </div>
+
+            <!-- "Hôm nay ăn gì?" Tool -->
+            <div class="tool-card" id="card-food">
+                <div class="card-header">
+                    <span class="card-icon">🍜</span>
+                    <h2>Hôm nay ăn gì?</h2>
+                </div>
+                <div class="card-body">
+                    <div class="food-list-container">
+                        <div id="food-list" class="tag-cloud"></div>
+                        <div class="input-row">
+                            <input type="text" id="food-input" placeholder="Add food...">
+                            <button class="btn-icon" onclick="addFood()">+</button>
+                        </div>
+                    </div>
+                    <div class="result-display" id="food-result">...</div>
+                    <button class="btn-primary" onclick="randomFood()">PICK FOR ME</button>
+                </div>
+            </div>
+
+            <!-- History Tool -->
+            <div class="tool-card" id="card-history">
+                <div class="card-header">
+                    <span class="card-icon">📜</span>
+                    <h2>History</h2>
+                </div>
+                <div class="card-body">
+                    <div id="history-container" class="history-list">
+                        <p class="empty-msg">No history yet</p>
+                    </div>
+                    <button class="btn-secondary" onclick="clearHistory()">CLEAR HISTORY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/random.js"></script>
+</body>
+
+</html>

@@ -151,7 +151,26 @@ body {
     margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+}
+
+.home-btn {
+    text-decoration: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.home-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* Tree Menu */
@@ -280,4 +299,63 @@ iframe {
 
 iframe.active {
     display: block;
+}
+
+/* Personal Info Widget */
+.info-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.info-toggle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), #8B5CF6);
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.info-toggle:hover {
+    transform: scale(1.1);
+}
+
+.info-widget.active .info-toggle {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.info-content {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 20px;
+    color: var(--color-text-primary);
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.info-widget.active .info-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
